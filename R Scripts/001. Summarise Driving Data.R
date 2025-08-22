@@ -36,18 +36,6 @@ NE_phys <- list.files("../../24-25/West_Greenland_Implementation/Objects/NEMO RA
   st_transform(crs = 3035)
 saveRDS(NE_phys,"./Objects/Driving/NE_phys.RDS")
 
-NE_ice <- list.files("../../24-25/West_Greenland_Implementation/Objects/NEMO RAW/NE_Months_Ice", full.names = TRUE) %>% 
-  future_map(.,.f = readRDS) %>%  #read in files - each element is its own month
-  bind_rows() %>% 
-  group_by(longitude,latitude,Year,Month,Forcing,SSP) %>% 
-  summarise(Ice_Thickness = mean(Ice_Thickness,na.rm = TRUE),
-            Ice_conc = mean(Ice_conc,na.rm = TRUE),
-            Snow_Thickness = mean(Snow_Thickness,na.rm = TRUE),
-            Bathymetry = mean(Bathymetry,na.rm = TRUE)) %>%  #sorts slab_layer calculation
-  ungroup() %>% 
-  group_by(Year,Month) %>% 
-  mutate(MeanIce = mean(Ice_conc)) %>% 
-  st_as_sf(coords = c("longitude","latitude"),crs = 4326) %>% 
-  st_transform(crs = 3035)
-saveRDS(NE_ice,"./Objects/Driving/NE_ice.RDS")
+## Code to summarise Ice variables here
+
 toc()
